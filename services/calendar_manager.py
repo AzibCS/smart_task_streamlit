@@ -1,11 +1,11 @@
 from googleapiclient.discovery import build
-from .google_auth import get_google_credentials
+from .google_auth import get_calendar_credentials
 from datetime import datetime, timedelta
 import pandas as pd
 
 class CalendarManager:
     def __init__(self, creds=None):
-        self.creds = creds or get_google_credentials()
+        self.creds = creds or get_calendar_credentials()
         self.service = build("calendar", "v3", credentials=self.creds)
 
     def fetch_events(self, days_ahead=7, max_results=20, calendar_id="primary"):

@@ -1,11 +1,11 @@
 from googleapiclient.discovery import build
-from .google_auth import get_google_credentials
+from .google_auth import get_gmail_credentials
 import pandas as pd
 from datetime import datetime
 
 class EmailManager:
     def __init__(self):
-        self.creds = get_google_credentials()
+        self.creds = get_gmail_credentials()
         self.service = build("gmail", "v1", credentials=self.creds)
 
     def fetch_emails(self, max_results=20):
