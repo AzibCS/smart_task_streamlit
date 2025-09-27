@@ -1,40 +1,42 @@
+import os
+import streamlit as st
 from google_auth_oauthlib.flow import InstalledAppFlow
-import os, streamlit as st
 
 SCOPES = [
     "https://www.googleapis.com/auth/calendar.readonly",
     "https://www.googleapis.com/auth/gmail.readonly"
 ]
 
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+CRED_DIR = os.path.join(BASE_DIR, "credentials")
+CRED_PATH = os.path.join(CRED_DIR, "credentials.json")
+
+def ensure_credentials_file():
+    """Writes credentials.json from Streamlit secrets if running in cloud"""
+    os.makedirs(CRED_DIR, exist_ok=True)
+    if "google" in st.secrets and "client_secrets" in st.secrets["google"]:
+        with open(CRED_PATH, "w", encoding="utf-8") as f:
+            f.write(st.secrets["google"]["client_secrets"])
+    return CRED_PATH
+
 def get_google_credentials():
-    if "google_creds" in st.session_state:
-        return st.session_state.google_creds
+    creds = None
 
-    flow = InstalledAppFlow.from_client_secrets_file("credentials/credentials.json", SCOPES)
+    # Ensure credentials.json exists
+    cred_file = ensure_credentials_file()
 
-    oauth_flow = os.environ.get("OAUTH_FLOW", "console").lower()
+    flow = InstalledAppFlow.from_client_secrets_file(cred_file, SCOPES)
 
-    if oauth_flow == "console":
-        # Manual flow for headless servers
+    if os.environ.get("OAUTH_FLOW", "local") == "console":
+        # Use console flow on Streamlit Cloud
         auth_url, _ = flow.authorization_url(prompt="consent")
-        st.warning("Google Authentication Required")
-        st.write("Click the link below, sign in, then paste the code here:")
-        st.markdown(f"[Authenticate here]({auth_url})")
+        st.write("👉 [Click here to authorize Google access](" + auth_url + ")")
 
-        auth_code = st.text_input("Enter the authorization code:")
-
+        auth_code = st.text_input("Paste the Google authorization code here:")
         if st.button("Submit Code"):
-            try:
-                flow.fetch_token(code=auth_code)
-                creds = flow.credentials
-                st.session_state.google_creds = creds
-                st.success("Authentication successful!")
-                return creds
-            except Exception as e:
-                st.error(f"Failed to fetch token: {e}")
-                return None
+            creds = flow.fetch_token(code=auth_code)
     else:
-        # Local dev flow with browser
-        creds = flow.run_local_server(port=0, access_type="offline", prompt="consent")
-        st.session_state.google_creds = creds
-        return creds
+        # Local dev
+        creds = flow.run_local_server(port=0)
+
+    return creds
