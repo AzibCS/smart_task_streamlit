@@ -1,6 +1,7 @@
 # main.py
 import streamlit as st
 import pandas as pd
+from streamlit_option_menu import option_menu
 from services.calendar_manager import CalendarManager
 from services.email_manager import EmailManager
 from services.task_manager import TaskManager
@@ -14,8 +15,16 @@ logger = Logger()
 # -----------------------------
 # Sidebar / Tabs
 # -----------------------------
-st.sidebar.title("Smart Task Automation Dashboard")
-tab = st.tabs(["Configuration", "Calendar", "Emails", "Tasks", "Logs"])
+with st.sidebar:
+    st.title("Smart Task Automation Dashboard")
+    tab = option_menu(
+        menu_title="Navigation",
+        options=["Configuration", "Calendar", "Emails", "Tasks", "Logs"],
+        icons=["gear", "calendar", "envelope", "list-task", "file-earmark-text"],
+        menu_icon="cast",
+        default_index=0,
+        orientation="vertical"
+    )
 
 # -----------------------------
 # Configuration Tab
