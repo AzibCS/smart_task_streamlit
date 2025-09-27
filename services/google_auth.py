@@ -1,42 +1,45 @@
 import os
+import pickle
 import streamlit as st
 from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
 
+# If modifying these SCOPES, delete the file token.pickle.
 SCOPES = [
     "https://www.googleapis.com/auth/calendar.readonly",
     "https://www.googleapis.com/auth/gmail.readonly"
 ]
 
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-CRED_DIR = os.path.join(BASE_DIR, "credentials")
-CRED_PATH = os.path.join(CRED_DIR, "credentials.json")
-
-def ensure_credentials_file():
-    """Writes credentials.json from Streamlit secrets if running in cloud"""
-    os.makedirs(CRED_DIR, exist_ok=True)
-    if "google" in st.secrets and "client_secrets" in st.secrets["google"]:
-        with open(CRED_PATH, "w", encoding="utf-8") as f:
-            f.write(st.secrets["google"]["client_secrets"])
-    return CRED_PATH
-
 def get_google_credentials():
     creds = None
 
-    # Ensure credentials.json exists
-    cred_file = ensure_credentials_file()
+    # Path inside secrets (string JSON)
+    client_secrets_json = st.secrets["google"]["client_secrets"]
 
-    flow = InstalledAppFlow.from_client_secrets_file(cred_file, SCOPES)
+    # Load flow type from secrets
+    oauth_flow = st.secrets["google"].get("oauth_flow", "local")
 
-    if os.environ.get("OAUTH_FLOW", "local") == "console":
-        # Use console flow on Streamlit Cloud
-        auth_url, _ = flow.authorization_url(prompt="consent")
-        st.write("👉 [Click here to authorize Google access](" + auth_url + ")")
+    # Try to load token from session_state
+    if "google_token" in st.session_state:
+        creds = Credentials.from_authorized_user_info(st.session_state["google_token"], SCOPES)
 
-        auth_code = st.text_input("Paste the Google authorization code here:")
-        if st.button("Submit Code"):
-            creds = flow.fetch_token(code=auth_code)
-    else:
-        # Local dev
-        creds = flow.run_local_server(port=0)
+    # If no valid creds available, let user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_config(
+                eval(client_secrets_json),  # Parse JSON string
+                SCOPES
+            )
+
+            if oauth_flow == "console":
+                creds = flow.run_console()
+            else:
+                creds = flow.run_local_server(port=0)
+
+        # Save the credentials to session_state
+        st.session_state["google_token"] = creds.to_json()
 
     return creds
