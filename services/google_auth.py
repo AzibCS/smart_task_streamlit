@@ -43,7 +43,7 @@ def get_google_credentials():
 
     flow = InstalledAppFlow.from_client_secrets_file(CRED_PATH, SCOPES)
 
-    oauth_flow = os.environ.get("OAUTH_FLOW", "local").lower()
+    oauth_flow = os.environ.get("OAUTH_FLOW", "console").lower()
     if oauth_flow == "console":
         # Hosted environment: user follows URL and pastes auth code
         creds = flow.run_console()
