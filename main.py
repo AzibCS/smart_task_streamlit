@@ -15,7 +15,7 @@ logger = Logger()
 # Sidebar / Tabs
 # -----------------------------
 st.sidebar.title("Smart Task Automation Dashboard")
-tab = st.sidebar.radio("Select Tab", ["Configuration", "Calendar", "Emails", "Tasks", "Logs"])
+tab = st.tabs("Select Tab", ["Configuration", "Calendar", "Emails", "Tasks", "Logs"])
 
 # -----------------------------
 # Configuration Tab
