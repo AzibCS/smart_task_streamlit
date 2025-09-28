@@ -62,7 +62,7 @@ def get_google_credentials():
             pass
 
     # 3) check for 'code' in the current URL (user was redirected back from Google)
-    params = st.experimental_get_query_params()
+    params = st.query_params
     if "code" in params:
         code = params["code"][0]
         # Recreate flow and exchange code
