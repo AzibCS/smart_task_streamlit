@@ -1,6 +1,7 @@
 
 # Ignore Python virtual environment
 .venv/
+secrets.toml
 venv/
 __pycache__/
 *.pyc

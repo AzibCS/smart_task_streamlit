@@ -1,18 +1,24 @@
 from googleapiclient.discovery import build
-from .google_auth import get_gmail_credentials
+from .google_auth import get_google_credentials
 import pandas as pd
-from datetime import datetime
 
 class EmailManager:
     def __init__(self):
-        self.creds = get_gmail_credentials()
+        self.creds = get_google_credentials()
+        if not self.creds:
+            raise Exception("Google credentials not loaded")
+
+        # ✅ Build Gmail service
         self.service = build("gmail", "v1", credentials=self.creds)
 
     def fetch_emails(self, max_results=20):
-        """Fetch latest Gmail messages"""
+        """
+        Gmail via service account will only work with domain-wide delegation.
+        For personal accounts, this will raise an error.
+        """
         try:
             results = self.service.users().messages().list(
-                userId="me", labelIds=["INBOX"], maxResults=max_results
+                userId="me", maxResults=max_results
             ).execute()
             messages = results.get("messages", [])
 
@@ -27,7 +33,7 @@ class EmailManager:
                 sender = next((h["value"] for h in headers if h["name"] == "From"), "Unknown Sender")
 
                 emails.append({
-                    "id": msg["id"],          # keep id to modify emails
+                    "id": msg["id"],
                     "subject": subject,
                     "from": sender,
                 })
@@ -35,7 +41,9 @@ class EmailManager:
             return pd.DataFrame(emails)
 
         except Exception as e:
+            # If service account cannot access Gmail, return friendly error
             return pd.DataFrame([{"subject": "Error fetching emails", "from": str(e)}])
+
 
     def sort_emails(self, rules=None):
         """
