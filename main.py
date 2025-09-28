@@ -104,7 +104,7 @@ elif tab == "Emails":
                 "from": "Sender"
             })
             st.dataframe(emails_display)
-            sender_count = emails['from'].value_counts()
+            sender_count = emails_display['Sender'].value_counts()
             st.bar_chart(sender_count)
 
         # --- Add sorting section ---
