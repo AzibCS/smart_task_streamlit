@@ -44,7 +44,7 @@ class EmailManager:
 
         except Exception as e:
             # If service account cannot access Gmail, return friendly error
-            return pd.DataFrame([{"subject": "Error fetching emails", "from": str(e)}])
+            return pd.DataFrame([{"Subject": "Error fetching emails", "From": str(e)}])
 
 
     def sort_emails(self, rules=None):
@@ -78,7 +78,7 @@ class EmailManager:
             # 2️⃣ Fetch inbox emails
             emails = self.fetch_emails(max_results=50)
             for idx, row in emails.iterrows():
-                if keyword in row["subject"].lower() or keyword in row["from"].lower():
+                if keyword in row["Subject"].lower() or keyword in row["From"].lower():
                     mods = {}
                     if label_id:
                         mods["addLabelIds"] = [label_id]
