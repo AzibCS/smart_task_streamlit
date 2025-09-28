@@ -90,14 +90,19 @@ elif tab == "Calendar":
 # Emails Tab
 # -----------------------------
 elif tab == "Emails":
-    st.header("Inbox Summary")
+    st.header("Gamail Inbox Summary")
     try:
         em = EmailManager()
         emails = em.fetch_emails(max_results=50)
-        st.dataframe(emails)
+        #st.dataframe(emails)
 
         # Optional: chart by sender
         if not emails.empty:
+            emails_display = emails.rename(columns={
+                "subject": "✉️ Subject",
+                "from": "👤 Sender"
+            })
+            st.dataframe(emails_display, use_container_width=True)
             sender_count = emails['from'].value_counts()
             st.bar_chart(sender_count)
 
