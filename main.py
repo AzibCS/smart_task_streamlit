@@ -57,7 +57,7 @@ if tab == "Configuration":
         # st.info("After signing in you'll be redirected back here and login will complete.")
         st.markdown(f"### Google sign-in")
         st.markdown(f"[Click here to sign in with Google]({auth_url})")
-        st.info("After signing in you ll be redirected back to this app and the app will complete the login.")
+        st.info("After signing in you ll be redirected to the app.")
     st.session_state.creds['trello_key'] = st.text_input("Trello API Key", type="password")
     st.session_state.creds['trello_token'] = st.text_input("Trello API Token", type="password")
     
@@ -103,7 +103,7 @@ elif tab == "Emails":
 
         # --- Add sorting section ---
         st.subheader("Email Sorting")
-        keyword = st.text_input("Keyword to search in sender/subject")
+        keyword = st.text_input("Keyword to searcch in sender/subject")
         label = st.text_input("Label to apply")
         archive = st.checkbox("Archive emails after labeling")
 
