@@ -43,9 +43,18 @@ if tab == "Configuration":
             st.rerun()
     else:
         auth_url, _ = get_authorization_url()
-        if st.button("Sign in with Google"):
-            st.write(f'<a href="{auth_url}">Redirecting...</a>', unsafe_allow_html=True)
-            st.markdown(f"<script>window.location.href='{auth_url}';</script>", unsafe_allow_html=True)
+        st.markdown(
+            f"""
+            <a href="{auth_url}" target="_self">
+                <button style="background-color:#4285F4;color:white;
+                padding:8px 16px;border:none;border-radius:4px;cursor:pointer;">
+                Sign in with Google
+                </button>
+            </a>
+            """,
+            unsafe_allow_html=True
+        )
+        st.info("After signing in you'll be redirected back here and login will complete.")
         # st.markdown(f"### Google sign-in")
         # st.markdown(f"[Click here to sign in with Google]({auth_url})")
         # st.info("After signing in you ll be redirected back to this app and the app will complete the login.")
