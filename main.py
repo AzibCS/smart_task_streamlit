@@ -43,21 +43,21 @@ if tab == "Configuration":
             st.rerun()
     else:
         auth_url, _ = get_authorization_url()
-        st.markdown(
-            f"""
-            <a href="{auth_url}" target="_self">
-                <button style="background-color:#4285F4;color:white;
-                padding:8px 16px;border:none;border-radius:4px;cursor:pointer;">
-                Sign in with Google
-                </button>
-            </a>
-            """,
-            unsafe_allow_html=True
-        )
-        st.info("After signing in you'll be redirected back here and login will complete.")
-        # st.markdown(f"### Google sign-in")
-        # st.markdown(f"[Click here to sign in with Google]({auth_url})")
-        # st.info("After signing in you ll be redirected back to this app and the app will complete the login.")
+        # st.markdown(
+        #     f"""
+        #     <a href="{auth_url}" target="_self">
+        #         <button style="background-color:#4285F4;color:white;
+        #         padding:8px 16px;border:none;border-radius:4px;cursor:pointer;">
+        #         Sign in with Google
+        #         </button>
+        #     </a>
+        #     """,
+        #     unsafe_allow_html=True
+        # )
+        # st.info("After signing in you'll be redirected back here and login will complete.")
+        st.markdown(f"### Google sign-in")
+        st.markdown(f"[Click here to sign in with Google]({auth_url})")
+        st.info("After signing in you ll be redirected back to this app and the app will complete the login.")
     st.session_state.creds['trello_key'] = st.text_input("Trello API Key", type="password")
     st.session_state.creds['trello_token'] = st.text_input("Trello API Token", type="password")
     
