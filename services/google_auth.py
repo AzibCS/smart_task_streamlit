@@ -29,9 +29,9 @@ def _get_redirect_uri():
     return uris[0] if uris else None
 
 def get_google_credentials():
-    """
-    Returns google.oauth2.credentials.Credentials for the currently signed-in user.
-    """
+
+    # Returns google.oauth2.credentials.Credentials for the currently signed-in user.
+    
     # 1) reuse session
     if "google_creds" in st.session_state:
         creds = Credentials.from_authorized_user_info(
@@ -69,7 +69,7 @@ def get_google_credentials():
             st.query_params.clear()
             return creds
         except Exception as e:
-            st.error(f"Failed to fetch token: {e}")
+            st.query_params.clear()
             return None
 
     return None
@@ -91,3 +91,4 @@ def get_authorization_url():
 def sign_out():
     if "google_creds" in st.session_state:
         del st.session_state["google_creds"]
+    st.rerun()
