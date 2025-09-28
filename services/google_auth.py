@@ -60,7 +60,8 @@ def get_google_credentials():
         code = params.get("code")
         client_config = _get_client_config()
         redirect_uri = _get_redirect_uri()
-        flow = Flow.from_client_config(client_config, scopes=SCOPES, redirect_uri=redirect_uri)
+        flow = Flow.from_client_config(client_config, scopes=SCOPES)
+        flow.redirect_uri=redirect_uri # updation
         try:
             flow.fetch_token(code=code)
             creds = flow.credentials
@@ -80,8 +81,9 @@ def get_authorization_url():
     """
     client_config = _get_client_config()
     redirect_uri = _get_redirect_uri()
-    st.write("DEBUG redirect_uri:", redirect_uri)
-    flow = Flow.from_client_config(client_config, scopes=SCOPES, redirect_uri=redirect_uri)
+
+    flow = Flow.from_client_config(client_config, scopes=SCOPES,)# redirect_uri=redirect_uri)
+    flow.redirect_uri=redirect_uri # updation
     auth_url, state = flow.authorization_url(
         access_type="offline",
         include_granted_scopes="true",
