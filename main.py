@@ -44,12 +44,8 @@ if tab == "Configuration":
     else:
         auth_url, _ = get_authorization_url()
         if st.button("Sign in with Google"):
-            st.markdown(
-            f"""
-            <meta http-equiv="refresh" content="0; url={auth_url}">
-            """,
-            unsafe_allow_html=True
-        )
+            st.write(f'<a href="{auth_url}">Redirecting...</a>', unsafe_allow_html=True)
+            st.markdown(f"<script>window.location.href='{auth_url}';</script>", unsafe_allow_html=True)
         # st.markdown(f"### Google sign-in")
         # st.markdown(f"[Click here to sign in with Google]({auth_url})")
         # st.info("After signing in you ll be redirected back to this app and the app will complete the login.")
