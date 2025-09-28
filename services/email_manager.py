@@ -25,27 +25,27 @@ class EmailManager:
             messages = results.get("messages", [])
 
             emails = []
-            # for msg in messages:
-            #     msg_data = self.service.users().messages().get(
-            #         userId="me", id=msg["id"]
-            #     ).execute()
-
-            #     headers = msg_data.get("payload", {}).get("headers", [])
-            #     subject = next((h["value"] for h in headers if h["name"] == "Subject"), "No Subject")
-            #     sender = next((h["value"] for h in headers if h["name"] == "From"), "Unknown Sender")
-
-            #     emails.append({
-            #         "id": msg["id"],
-            #         "subject": subject,
-            #         "from": sender,
-            #     })
-
-            # return pd.DataFrame(emails)
             for msg in messages:
-                m = self.service.users().messages().get(userId="me", id=msg["id"]).execute()
-                snippet = m.get("snippet", "")
-                emails.append(snippet)
-            return emails
+                msg_data = self.service.users().messages().get(
+                    userId="me", id=msg["id"]
+                ).execute()
+
+                headers = msg_data.get("payload", {}).get("headers", [])
+                subject = next((h["value"] for h in headers if h["name"] == "Subject"), "No Subject")
+                sender = next((h["value"] for h in headers if h["name"] == "From"), "Unknown Sender")
+
+                emails.append({
+                    "id": msg["id"],
+                    "subject": subject,
+                    "from": sender,
+                })
+
+            return pd.DataFrame(emails)
+            # for msg in messages:
+            #     m = self.service.users().messages().get(userId="me", id=msg["id"]).execute()
+            #     snippet = m.get("snippet", "")
+            #     emails.append(snippet)
+            # return emails
 
         except Exception as e:
             # If service account cannot access Gmail, return friendly error
