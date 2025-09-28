@@ -43,16 +43,16 @@ def get_google_credentials():
         return creds
 
     # 2) check stored token in secrets (optional admin step)
-    if "google" in st.secrets and "stored_token" in st.secrets["google"]:
-        try:
-            token_info = json.loads(st.secrets["google"]["stored_token"])
-            creds = Credentials.from_authorized_user_info(token_info, SCOPES)
-            if creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            st.session_state["google_creds"] = creds.to_json()
-            return creds
-        except Exception:
-            pass
+    # if "google" in st.secrets and "stored_token" in st.secrets["google"]:
+    #     try:
+    #         token_info = json.loads(st.secrets["google"]["stored_token"])
+    #         creds = Credentials.from_authorized_user_info(token_info, SCOPES)
+    #         if creds.expired and creds.refresh_token:
+    #             creds.refresh(Request())
+    #         st.session_state["google_creds"] = creds.to_json()
+    #         return creds
+    #     except Exception:
+    #         pass
 
     # 3) check for 'code' in the current URL (user was redirected back from Google)
     params = st.query_params
@@ -82,7 +82,7 @@ def get_authorization_url():
     client_config = _get_client_config()
     redirect_uri = _get_redirect_uri()
 
-    flow = Flow.from_client_config(client_config, scopes=SCOPES,)# redirect_uri=redirect_uri)
+    flow = Flow.from_client_config(client_config, scopes=SCOPES)# redirect_uri=redirect_uri)
     flow.redirect_uri=redirect_uri # updation
     auth_url, state = flow.authorization_url(
         access_type="offline",
