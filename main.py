@@ -1,6 +1,7 @@
 # main.py
 import streamlit as st
 import pandas as pd
+from services.google_auth import get_google_credentials, get_authorization_url, sign_out
 from streamlit_option_menu import option_menu
 from services.calendar_manager import CalendarManager
 from services.email_manager import EmailManager
@@ -40,6 +41,17 @@ if tab == "Configuration":
     
     st.success("Enter Trello credentails and proceed to Task tab")
 
+creds = get_google_credentials()
+if creds:
+    st.success("Google signed in")
+    if st.button("Sign out"):
+        sign_out()
+        st.experimental_rerun()
+else:
+    auth_url, _ = get_authorization_url()
+    st.markdown(f"### Google sign-in")
+    st.markdown(f"[Click here to sign in with Google]({auth_url})")
+    st.info("After signing in you will be redirected back to this app and the app will complete the login.")
 # -----------------------------
 # Calendar Tab
 # -----------------------------

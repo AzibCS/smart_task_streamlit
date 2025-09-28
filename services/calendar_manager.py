@@ -7,8 +7,7 @@ class CalendarManager:
     def __init__(self):
         self.creds = get_google_credentials()
         if not self.creds:
-            raise Exception("Google credentials not loaded")
-        # ✅ Build service directly using service account creds
+            raise Exception("User not signed in")
         self.service = build("calendar", "v3", credentials=self.creds)
 
     def fetch_events(self, days_ahead=7, max_results=20, calendar_id="primary"):

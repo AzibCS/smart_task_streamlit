@@ -6,9 +6,8 @@ class EmailManager:
     def __init__(self):
         self.creds = get_google_credentials()
         if not self.creds:
-            raise Exception("Google credentials not loaded")
+            raise Exception("Usser not signed in")
 
-        # ✅ Build Gmail service
         self.service = build("gmail", "v1", credentials=self.creds)
 
     def fetch_emails(self, max_results=20):

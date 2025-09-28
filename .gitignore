@@ -2,6 +2,7 @@
 # Ignore Python virtual environment
 .venv/
 secrets.toml
+service_account.json
 venv/
 __pycache__/
 *.pyc
