@@ -35,17 +35,12 @@ class EmailManager:
                 sender = next((h["value"] for h in headers if h["name"] == "From"), "Unknown Sender")
 
                 emails.append({
-                    "id": msg["id"],
-                    "subject": subject,
-                    "from": sender,
+                    "Id": msg["id"],
+                    "Subject": subject,
+                    "From": sender,
                 })
 
             return pd.DataFrame(emails)
-            # for msg in messages:
-            #     m = self.service.users().messages().get(userId="me", id=msg["id"]).execute()
-            #     snippet = m.get("snippet", "")
-            #     emails.append(snippet)
-            # return emails
 
         except Exception as e:
             # If service account cannot access Gmail, return friendly error

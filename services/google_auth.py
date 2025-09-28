@@ -80,6 +80,7 @@ def get_authorization_url():
     """
     client_config = _get_client_config()
     redirect_uri = _get_redirect_uri()
+    st.write("DEBUG redirect_uri:", redirect_uri)
     flow = Flow.from_client_config(client_config, scopes=SCOPES, redirect_uri=redirect_uri)
     auth_url, state = flow.authorization_url(
         access_type="offline",
