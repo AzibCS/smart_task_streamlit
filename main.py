@@ -35,7 +35,7 @@ if tab == "Configuration":
     
     if "creds" not in st.session_state:
         st.session_state.creds = {}
-        creds = get_google_credentials()
+    creds = get_google_credentials()
     if creds:
         st.success("Google signed in")
         if st.button("Sign out"):
