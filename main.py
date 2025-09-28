@@ -26,17 +26,7 @@ with st.sidebar:
         default_index=0,
         orientation="vertical"
     )
-creds = get_google_credentials()
-if creds:
-    st.success("Google signed in")
-    if st.button("Sign out"):
-        sign_out()
-        st.experimental_rerun()
-else:
-    auth_url, _ = get_authorization_url()
-    st.markdown(f"### Google sign-in")
-    st.markdown(f"[Click here to sign in with Google]({auth_url})")
-    st.info("After signing in you will be redirected back to this app and the app will complete the login.")
+
 # -----------------------------
 # Configuration Tab
 # -----------------------------
@@ -45,7 +35,17 @@ if tab == "Configuration":
     
     if "creds" not in st.session_state:
         st.session_state.creds = {}
-
+        creds = get_google_credentials()
+    if creds:
+        st.success("Google signed in")
+        if st.button("Sign out"):
+            sign_out()
+            st.experimental_rerun()
+    else:
+        auth_url, _ = get_authorization_url()
+        st.markdown(f"### Google sign-in")
+        st.markdown(f"[Click here to sign in with Google]({auth_url})")
+        st.info("After signing in you ll be redirected back to this app and the app will complete the login.")
     st.session_state.creds['trello_key'] = st.text_input("Trello API Key", type="password")
     st.session_state.creds['trello_token'] = st.text_input("Trello API Token", type="password")
     
