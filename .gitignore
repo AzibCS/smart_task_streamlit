@@ -9,3 +9,4 @@ __pycache__/
 credentials/
 token.json
 trello.json
+service_account.b64.txt
