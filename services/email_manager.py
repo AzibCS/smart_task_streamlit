@@ -89,11 +89,6 @@ class EmailManager:
                         self.service.users().messages().modify(
                             userId="me", id=row["id"], body=mods
                         ).execute()
-                        results.append({"Email ID": row["id"],
-                                        "Subject": row["subject"],
-                                        "Sender": row["from"],
-                                        "Action": f"Labeled: {label_name}, Archived: {archive}"})
-        if results:
-            return pd.DataFrame(results)
-        else:
-            return pd.DataFrame([{"Email ID": "-", "Subject": "-", "Sender": "-", "Action": "No matches"}])
+                        results.append({"email_id": row["id"], "action": f"Labeled: {label_name}, Archived: {archive}"})
+
+        return results
