@@ -98,13 +98,18 @@ elif tab == "Emails":
 
         # Optional: chart by sender
         if not emails.empty:
-            emails_display = emails.rename(columns={
-                "id": "Id",
+            # emails_display = emails.rename(columns={
+            #     "id": "Id",
+            #     "subject": "Subject",
+            #     "from": "Sender"
+            # })
+            # st.dataframe(emails_display)
+            st.dataframe(emails.rename(columns={
+                "id": "Email ID",
                 "subject": "Subject",
                 "from": "Sender"
-            })
-            st.dataframe(emails_display)
-            sender_count = emails_display['Sender'].value_counts()
+            }))
+            sender_count = emails['Sender'].value_counts()
             st.bar_chart(sender_count)
 
         # --- Add sorting section ---
@@ -114,9 +119,10 @@ elif tab == "Emails":
         archive = st.checkbox("Archive emails after labeling")
 
         if st.button("Apply Sorting"):
-            rules = [{"keyword": keyword, "label": label, "archive": archive}]
+            rules = [{"keyword": "urgent", "label": "Important", "archive": False}]
             results = em.sort_emails(rules=rules)
-            st.dataframe("\tSorted Emails\n", results)
+            st.subheader("Sorted Emails")
+            st.dataframe(results)
 
     except Exception as e:
         st.error(f"Error fetching emails: {e}")

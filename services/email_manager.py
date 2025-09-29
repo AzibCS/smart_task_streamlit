@@ -92,7 +92,7 @@ class EmailManager:
                         results.append({"Email ID": row["id"],
                                         "Subject": row["subject"],
                                         "Sender": row["from"],
-                                        "Action": f"Labeled: {label_name or 'None'}, Archived: {archive}"})
+                                        "Action": f"Labeled: {label_name}, Archived: {archive}"})
         if results:
             return pd.DataFrame(results)
         else:
