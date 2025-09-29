@@ -116,7 +116,7 @@ elif tab == "Emails":
         if st.button("Apply Sorting"):
             rules = [{"keyword": keyword, "label": label, "archive": archive}]
             results = em.sort_emails(rules=rules)
-            st.write("Sorted Emails:", results)
+            st.dataframe("\tSorted Emails\n", results)
 
     except Exception as e:
         st.error(f"Error fetching emails: {e}")
