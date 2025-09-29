@@ -11,10 +11,7 @@ class EmailManager:
         self.service = build("gmail", "v1", credentials=self.creds)
 
     def fetch_emails(self, max_results=20):
-        """
-        Gmail via service account will only work with domain-wide delegation.
-        For personal accounts, this will raise an error.
-        """
+
         try:
             results = self.service.users().messages().list(
                 userId="me",
@@ -61,7 +58,7 @@ class EmailManager:
             label_name = rule.get("label")
             archive = rule.get("archive", False)
 
-            # 1️⃣ Check if label exists, create if not
+            # 1-Check if label exists, create if not
             label_id = None
             if label_name:
                 labels = self.service.users().labels().list(userId="me").execute().get("labels", [])
@@ -75,7 +72,7 @@ class EmailManager:
                     ).execute()
                     label_id = label["id"]
 
-            # 2️⃣ Fetch inbox emails
+            # 2- Fetch inbox emails
             emails = self.fetch_emails(max_results=50)
             for idx, row in emails.iterrows():
                 if keyword in row["subject"].lower() or keyword in row["from"].lower():

@@ -6,16 +6,12 @@ from streamlit_option_menu import option_menu
 from services.calendar_manager import CalendarManager
 from services.email_manager import EmailManager
 from services.task_manager import TaskManager
-from services.logger_manager import Logger  # make sure your Logger file is renamed
+from services.logger_manager import Logger 
 
-# -----------------------------
-# Initialize Logger
-# -----------------------------
+
 logger = Logger()
 
-# -----------------------------
 # Sidebar / Tabs
-# -----------------------------
 with st.sidebar:
     st.title("Smart Task Automation Dashboard")
     tab = option_menu(
@@ -27,9 +23,8 @@ with st.sidebar:
         orientation="vertical"
     )
 
-# -----------------------------
 # Configuration Tab
-# -----------------------------
+
 if tab == "Configuration":
     st.header("API Configuration Page")
     
@@ -61,12 +56,10 @@ if tab == "Configuration":
     st.session_state.creds['trello_key'] = st.text_input("Trello API Key", type="password")
     st.session_state.creds['trello_token'] = st.text_input("Trello API Token", type="password")
     
-    st.success("Enter Trello credentails and proceed to Task tab")
+    st.success("Enter Trello credentails and then proceed to Task tab")
 
-
-# -----------------------------
 # Calendar Tab
-# -----------------------------
+
 elif tab == "Calendar":
     st.header("Upcoming Events")
     try:
@@ -86,9 +79,8 @@ elif tab == "Calendar":
     except Exception as e:
         st.error(f"Error fetching calendar events: {e}")
 
-# -----------------------------
 # Emails Tab
-# -----------------------------
+
 elif tab == "Emails":
     st.header("Gmail Inbox Summary")
     try:
@@ -121,10 +113,7 @@ elif tab == "Emails":
     except Exception as e:
         st.error(f"Error fetching emails: {e}")
 
-
-# -----------------------------
 # Tasks Tab
-# -----------------------------
 
 elif tab == "Tasks":
     st.header("Trello Tasks")
@@ -150,10 +139,8 @@ elif tab == "Tasks":
     except Exception as e:
         st.error(f"Error fetching tasks: {e}")
 
-
-# -----------------------------
 # Logs Tab
-# -----------------------------
+
 elif tab == "Logs":
     st.header("Automation Logs")
     try:

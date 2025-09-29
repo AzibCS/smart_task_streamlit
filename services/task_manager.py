@@ -5,17 +5,17 @@ LOCAL_TRELLO_JSON = os.path.join(BASE_DIR, "credentials", "trello.json")
 
 class TaskManager:
     def __init__(self, api_key=None, token=None):
-        # 1) prefer passed in (from UI)
+
         self.api_key = api_key
         self.token = token
-        # 2) fallback to st.secrets (deployed)
+        #  fallback to st.secrets (deployed)
         try:
             if (not self.api_key or not self.token) and "trello" in st.secrets:
                 self.api_key = self.api_key or st.secrets["trello"].get("api_key")
                 self.token   = self.token   or st.secrets["trello"].get("api_token")
         except Exception:
             pass
-        # 3) fallback to local file for dev
+        #  fallback to local file for dev
         if (not self.api_key or not self.token) and os.path.exists(LOCAL_TRELLO_JSON):
             with open(LOCAL_TRELLO_JSON, "r", encoding="utf-8") as f:
                 creds = json.load(f)
@@ -58,7 +58,7 @@ class TaskManager:
         return pd.DataFrame(tasks)
 
     def fetch_all_tasks(self):
-        """Fetch tasks from all boards"""
+        #Fetch tasks from all boards
         boards = self.fetch_boards()
         if not boards:
             return pd.DataFrame([{"task": "No boards found", "status": "N/A"}])

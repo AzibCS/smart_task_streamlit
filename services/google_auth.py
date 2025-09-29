@@ -56,7 +56,7 @@ def get_google_credentials():
     #     except Exception:
     #         pass
 
-    # 3) check for 'code' in the current URL (user was redirected back from Google)
+    # 3) check for 'code' in the current URL (user may redirected back from Google)
     params = st.query_params
     if "code" in params:
         code = params.get("code")
@@ -68,7 +68,6 @@ def get_google_credentials():
             flow.fetch_token(code=code)
             creds = flow.credentials
             st.session_state["google_creds"] = creds.to_json()
-            # Clear query params
             st.query_params.clear()
             return creds
         except Exception as e:

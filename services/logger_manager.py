@@ -14,13 +14,13 @@ class Logger:
                 writer.writerow(["timestamp", "action", "details"])
     
     def log_action(self, action, details):
-        """Log an action with timestamp"""
+        #Log an action with timestamp
         with open(self.log_file, "a", newline="") as f:
             writer = csv.writer(f)
             writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), action, details])
     
     def get_logs(self):
-        """Return logs as a pandas DataFrame"""
+        #Return logs as a pandas DataFrame
         try:
             df = pd.read_csv(self.log_file)
             return df
@@ -28,11 +28,11 @@ class Logger:
             return pd.DataFrame([{"timestamp": "", "action": "Error", "details": str(e)}])
     
     def export_logs(self, fmt="csv"):
-        """Return logs as CSV or JSON string"""
+        # Return logs as CSV or JSON string
         df = self.get_logs()
         if fmt.lower() == "csv":
             return df.to_csv(index=False)
         elif fmt.lower() == "json":
             return df.to_json(orient="records", indent=4)
         else:
-            raise ValueError("Format must be 'csv' or 'json'")
+            raise ValueError("Format mustt be 'csv' or 'json'")
